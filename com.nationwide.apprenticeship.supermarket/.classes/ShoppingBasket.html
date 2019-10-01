@@ -1,0 +1,193 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: ShoppingBasket</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">com.nationwide.apprenticeship.supermarket</a> ]
+</div>
+
+<h1>Coverage Summary for Class: ShoppingBasket (com.nationwide.apprenticeship.supermarket)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">ShoppingBasket</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (9/ 9)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (40/ 40)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;package com.nationwide.apprenticeship.supermarket;
+<i>2</i>&nbsp;
+<i>3</i>&nbsp;import com.nationwide.apprenticeship.entity.Offer;
+<i>4</i>&nbsp;
+<i>5</i>&nbsp;import java.text.NumberFormat;
+<i>6</i>&nbsp;import java.util.ArrayList;
+<i>7</i>&nbsp;import java.util.Comparator;
+<i>8</i>&nbsp;import java.util.List;
+<i>9</i>&nbsp;import java.util.Locale;
+<i>10</i>&nbsp;import java.util.concurrent.atomic.AtomicInteger;
+<i>11</i>&nbsp;import java.util.stream.Collectors;
+<i>12</i>&nbsp;
+<b class="fc"><i>13</i>&nbsp;public class ShoppingBasket {</b>
+<b class="fc"><i>14</i>&nbsp;    private ArrayList&lt;BasketItem&gt; items = new ArrayList&lt;BasketItem&gt;();</b>
+<i>15</i>&nbsp;
+<i>16</i>&nbsp;    public void addProduct(String name, double price, int quantity, Offer offer) {
+<i>17</i>&nbsp;        /* Find the Basket Item if it already exists in the Basket */
+<b class="fc"><i>18</i>&nbsp;        BasketItem item = items.stream().filter(basketItem -&gt; basketItem.getName().equals(name)).findFirst().orElse(null);</b>
+<i>19</i>&nbsp;
+<b class="fc"><i>20</i>&nbsp;        if (item != null) {</b>
+<i>21</i>&nbsp;            /* If the Basket Item has already been added, call addItems() and pass
+<i>22</i>&nbsp;            * the additional quantity */
+<b class="fc"><i>23</i>&nbsp;            item.addItems(quantity);</b>
+<i>24</i>&nbsp;        } else {
+<i>25</i>&nbsp;            /* If the Item isn&#39;t in the basket
+<i>26</i>&nbsp;            * create a new Basket Item and add it to the top of the array */
+<b class="fc"><i>27</i>&nbsp;            item = new BasketItem(name, price, quantity, offer);</b>
+<b class="fc"><i>28</i>&nbsp;            items.add(0, item);</b>
+<i>29</i>&nbsp;        }
+<i>30</i>&nbsp;
+<i>31</i>&nbsp;        /* If Offer is of type &quot;TFTPOT&quot;
+<i>32</i>&nbsp;        * call applyTftpotDiscount() passing through the TFTPOT Group */
+<b class="fc"><i>33</i>&nbsp;        if (offer.isTftpot()) {</b>
+<b class="fc"><i>34</i>&nbsp;            applyTftpotDiscount(item.getOffer().getTftpotGroup());</b>
+<i>35</i>&nbsp;        }
+<b class="fc"><i>36</i>&nbsp;    }</b>
+<i>37</i>&nbsp;
+<i>38</i>&nbsp;    public void removeProduct(String name) {
+<i>39</i>&nbsp;        /* Get the Basket Item and remove it from the array */
+<b class="fc"><i>40</i>&nbsp;        BasketItem itemToRemove = items.stream().filter(basketItem -&gt; basketItem.getName().equals(name)).findFirst().get();</b>
+<i>41</i>&nbsp;
+<b class="fc"><i>42</i>&nbsp;        items.remove(itemToRemove);</b>
+<i>43</i>&nbsp;
+<i>44</i>&nbsp;        /* If Offer on the Basket Item is of type &quot;TFTPOT&quot;
+<i>45</i>&nbsp;        * call applyTftpotDiscount() passing through the TFTPOT Group */
+<b class="fc"><i>46</i>&nbsp;        if (itemToRemove.getOffer().isTftpot()) {</b>
+<b class="fc"><i>47</i>&nbsp;            applyTftpotDiscount(itemToRemove.getOffer().getTftpotGroup());</b>
+<i>48</i>&nbsp;        }
+<b class="fc"><i>49</i>&nbsp;    }</b>
+<i>50</i>&nbsp;
+<i>51</i>&nbsp;    public void applyTftpotDiscount(int group) {
+<i>52</i>&nbsp;        /* Get all of the Basket Items with the TFTPOT Offer
+<i>53</i>&nbsp;        * and in the passed-in Group */
+<b class="fc"><i>54</i>&nbsp;        List&lt;BasketItem&gt; tftpotItems = items.stream().filter(basketItem -&gt; basketItem.getOffer().isTftpot()).filter(basketItem -&gt; basketItem.getOffer().getTftpotGroup() == group).collect(Collectors.toList());</b>
+<i>55</i>&nbsp;        /* Get the total quantity of all of the Items in the Group */
+<b class="fc"><i>56</i>&nbsp;        int itemsQuantity = tftpotItems.stream().reduce(0, (quantity, basketItem) -&gt; quantity + basketItem.getQuantity(), Integer::sum);</b>
+<i>57</i>&nbsp;
+<i>58</i>&nbsp;        /* If the total quantity is 3 or more
+<i>59</i>&nbsp;        * (TFTPOT = Thee For The Price of Two) */
+<b class="fc"><i>60</i>&nbsp;        if (itemsQuantity &gt;= 3) {</b>
+<i>61</i>&nbsp;            /* Divide the total quantity by 3 to get the number of free products */
+<b class="fc"><i>62</i>&nbsp;            AtomicInteger freeProductsCount = new AtomicInteger(itemsQuantity / 3);</b>
+<i>63</i>&nbsp;            /* Sort the array so that it&#39;s ordered by the price of the items - cheapest first */
+<b class="fc"><i>64</i>&nbsp;            tftpotItems.sort(Comparator.comparing(BasketItem::getPrice));</b>
+<i>65</i>&nbsp;
+<b class="fc"><i>66</i>&nbsp;            tftpotItems.forEach(basketItem -&gt; {</b>
+<i>67</i>&nbsp;                /* Get the number of free products left after subtracting the quantity of the Basket Item */
+<b class="fc"><i>68</i>&nbsp;                int freeProductsLeft = freeProductsCount.get() - basketItem.getQuantity();</b>
+<b class="fc"><i>69</i>&nbsp;                if (freeProductsLeft &gt; 0) {</b>
+<i>70</i>&nbsp;                    /* If there are still free products left after discounting the quantity of the Basket Item
+<i>71</i>&nbsp;                    * subtract the quantity of Basket Item from the number of free products
+<i>72</i>&nbsp;                    * and apply the discount */
+<b class="fc"><i>73</i>&nbsp;                    int discountQuantity = freeProductsCount.get() - freeProductsLeft;</b>
+<b class="fc"><i>74</i>&nbsp;                    basketItem.applyTftpotDiscount(discountQuantity);</b>
+<b class="fc"><i>75</i>&nbsp;                    freeProductsCount.set(freeProductsLeft);</b>
+<b class="fc"><i>76</i>&nbsp;                } else {</b>
+<i>77</i>&nbsp;                    /* If there are no free products left
+<i>78</i>&nbsp;                    * apply the discount and set free products to 0 */
+<b class="fc"><i>79</i>&nbsp;                    basketItem.applyTftpotDiscount(freeProductsCount.get());</b>
+<b class="fc"><i>80</i>&nbsp;                    freeProductsCount.set(0);</b>
+<i>81</i>&nbsp;                }
+<b class="fc"><i>82</i>&nbsp;            });</b>
+<b class="fc"><i>83</i>&nbsp;        } else {</b>
+<i>84</i>&nbsp;            /* If the total quantity is less than 3
+<i>85</i>&nbsp;            * remove the discount from all Items within the Group */
+<b class="fc"><i>86</i>&nbsp;            tftpotItems.forEach(basketItem -&gt; basketItem.applyTftpotDiscount(0));</b>
+<i>87</i>&nbsp;        }
+<b class="fc"><i>88</i>&nbsp;    }</b>
+<i>89</i>&nbsp;
+<i>90</i>&nbsp;    public void clearBasket() {
+<b class="fc"><i>91</i>&nbsp;        items.clear();</b>
+<b class="fc"><i>92</i>&nbsp;    }</b>
+<i>93</i>&nbsp;
+<i>94</i>&nbsp;    public ArrayList&lt;BasketItem&gt; getItems() {
+<b class="fc"><i>95</i>&nbsp;        return items;</b>
+<i>96</i>&nbsp;    }
+<i>97</i>&nbsp;
+<i>98</i>&nbsp;    public int getNumberOfItems() {
+<b class="fc"><i>99</i>&nbsp;        return items.size();</b>
+<i>100</i>&nbsp;    }
+<i>101</i>&nbsp;
+<i>102</i>&nbsp;    public String getTotalPrice() {
+<i>103</i>&nbsp;        /* Get the total price of every Basket Item
+<i>104</i>&nbsp;        * and format it as GPB */
+<b class="fc"><i>105</i>&nbsp;        NumberFormat formatter = NumberFormat.getCurrencyInstance(Locale.UK);</b>
+<b class="fc"><i>106</i>&nbsp;        Double totalPrice = items.stream().reduce(0.0, (total, basketItem) -&gt; (total + basketItem.getTotalPrice()), Double::sum);</b>
+<i>107</i>&nbsp;
+<b class="fc"><i>108</i>&nbsp;        return formatter.format(totalPrice);</b>
+<i>109</i>&nbsp;    }
+<i>110</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2019-10-01 08:37</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,186 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: BasketItem</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">com.nationwide.apprenticeship.supermarket</a> ]
+</div>
+
+<h1>Coverage Summary for Class: BasketItem (com.nationwide.apprenticeship.supermarket)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">BasketItem</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (12/ 12)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (34/ 34)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;package com.nationwide.apprenticeship.supermarket;
+<i>2</i>&nbsp;
+<i>3</i>&nbsp;import com.nationwide.apprenticeship.entity.Offer;
+<i>4</i>&nbsp;
+<i>5</i>&nbsp;import java.util.Objects;
+<i>6</i>&nbsp;
+<i>7</i>&nbsp;public class BasketItem {
+<i>8</i>&nbsp;    private String name;
+<i>9</i>&nbsp;    private double price;
+<i>10</i>&nbsp;    private double discountedPrice;
+<i>11</i>&nbsp;    private int quantity;
+<i>12</i>&nbsp;    private int discountedQuantity;
+<i>13</i>&nbsp;    private Offer offer;
+<i>14</i>&nbsp;
+<b class="fc"><i>15</i>&nbsp;    public BasketItem(String name, double price, int quantity, Offer offer) {</b>
+<b class="fc"><i>16</i>&nbsp;        this.name = name;</b>
+<b class="fc"><i>17</i>&nbsp;        this.price = price;</b>
+<b class="fc"><i>18</i>&nbsp;        this.quantity = quantity;</b>
+<b class="fc"><i>19</i>&nbsp;        this.offer = offer;</b>
+<i>20</i>&nbsp;
+<i>21</i>&nbsp;        /* If Offer on Basket Item is of type &quot;Discount&quot;
+<i>22</i>&nbsp;        * work out the discounted price */
+<b class="fc"><i>23</i>&nbsp;        if (offer.isDiscount()) {</b>
+<b class="fc"><i>24</i>&nbsp;            this.discountedPrice = price - (price / 100 * offer.getDiscountPercentage());</b>
+<i>25</i>&nbsp;        }
+<i>26</i>&nbsp;
+<i>27</i>&nbsp;        /* If Offer on Basket Item is of type &quot;BOGOF&quot;
+<i>28</i>&nbsp;        * apply the discount */
+<b class="fc"><i>29</i>&nbsp;        if (offer.isBogof()) {</b>
+<b class="fc"><i>30</i>&nbsp;            applyBogofDiscount();</b>
+<i>31</i>&nbsp;        }
+<b class="fc"><i>32</i>&nbsp;    }</b>
+<i>33</i>&nbsp;
+<i>34</i>&nbsp;    public void addItems(int quantity) {
+<b class="fc"><i>35</i>&nbsp;        this.quantity += quantity;</b>
+<i>36</i>&nbsp;
+<i>37</i>&nbsp;        /* If Offer on Basket Item is of type &quot;BOGOF&quot;
+<i>38</i>&nbsp;        * apply the discount */
+<b class="fc"><i>39</i>&nbsp;        if (offer.isBogof()) {</b>
+<b class="fc"><i>40</i>&nbsp;            applyBogofDiscount();</b>
+<i>41</i>&nbsp;        }
+<b class="fc"><i>42</i>&nbsp;    }</b>
+<i>43</i>&nbsp;
+<i>44</i>&nbsp;    public void applyBogofDiscount() {
+<b class="fc"><i>45</i>&nbsp;        discountedQuantity = quantity / 2;</b>
+<b class="fc"><i>46</i>&nbsp;    }</b>
+<i>47</i>&nbsp;
+<i>48</i>&nbsp;    /* Pass through and store the quantity of items to discount */
+<i>49</i>&nbsp;    public void applyTftpotDiscount(int quantityToDiscount) {
+<b class="fc"><i>50</i>&nbsp;        discountedQuantity = quantityToDiscount;</b>
+<b class="fc"><i>51</i>&nbsp;    }</b>
+<i>52</i>&nbsp;
+<i>53</i>&nbsp;    public String getName() {
+<b class="fc"><i>54</i>&nbsp;        return name;</b>
+<i>55</i>&nbsp;    }
+<i>56</i>&nbsp;
+<i>57</i>&nbsp;    public double getPrice() {
+<b class="fc"><i>58</i>&nbsp;        return price;</b>
+<i>59</i>&nbsp;    }
+<i>60</i>&nbsp;
+<i>61</i>&nbsp;    public double getDiscountedPrice() {
+<b class="fc"><i>62</i>&nbsp;        return discountedPrice;</b>
+<i>63</i>&nbsp;    }
+<i>64</i>&nbsp;
+<i>65</i>&nbsp;    public int getQuantity() {
+<b class="fc"><i>66</i>&nbsp;        return quantity;</b>
+<i>67</i>&nbsp;    }
+<i>68</i>&nbsp;
+<i>69</i>&nbsp;    public double getTotalPrice() {
+<i>70</i>&nbsp;        /* If Offer on Basket Item is of type &quot;Discount&quot;
+<i>71</i>&nbsp;        * return the discountedPrice * the quantity */
+<b class="fc"><i>72</i>&nbsp;        if (offer.isDiscount()) {</b>
+<b class="fc"><i>73</i>&nbsp;            return discountedPrice * quantity;</b>
+<i>74</i>&nbsp;        }
+<i>75</i>&nbsp;
+<i>76</i>&nbsp;        /* If Offer on Basket Item is of type &quot;BOGOF&quot; or &quot;TFTPOT&quot;
+<i>77</i>&nbsp;        * return the price * the quantity - the number of discounted items */
+<b class="fc"><i>78</i>&nbsp;        if (offer.isBogof() || offer.isTftpot()) {</b>
+<b class="fc"><i>79</i>&nbsp;            return price * (quantity - discountedQuantity);</b>
+<i>80</i>&nbsp;        }
+<i>81</i>&nbsp;
+<i>82</i>&nbsp;        /* If the Basket Item has no Offers attached
+<i>83</i>&nbsp;        * return the price * quantity */
+<b class="fc"><i>84</i>&nbsp;        return price * quantity;</b>
+<i>85</i>&nbsp;    }
+<i>86</i>&nbsp;
+<b class="fc"><i>87</i>&nbsp;    public Offer getOffer() { return this.offer; }</b>
+<i>88</i>&nbsp;
+<i>89</i>&nbsp;    @Override
+<i>90</i>&nbsp;    public boolean equals(Object o) {
+<b class="fc"><i>91</i>&nbsp;        if (this == o) return true;</b>
+<b class="fc"><i>92</i>&nbsp;        if (o == null || getClass() != o.getClass()) return false;</b>
+<b class="fc"><i>93</i>&nbsp;        BasketItem that = (BasketItem) o;</b>
+<b class="fc"><i>94</i>&nbsp;        return Double.compare(that.price, price) == 0 &amp;&amp;</b>
+<i>95</i>&nbsp;                quantity == that.quantity &amp;&amp;
+<b class="fc"><i>96</i>&nbsp;                Objects.equals(name, that.name);</b>
+<i>97</i>&nbsp;    }
+<i>98</i>&nbsp;
+<i>99</i>&nbsp;    @Override
+<i>100</i>&nbsp;    public int hashCode() {
+<b class="fc"><i>101</i>&nbsp;        return Objects.hash(name, price, quantity);</b>
+<i>102</i>&nbsp;    }
+<i>103</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2019-10-01 08:37</div>
+</div>
+</body>
+</html>
